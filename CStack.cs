@@ -333,7 +333,7 @@ namespace Inlamning_3_ra_kod
         {
             int arrayorder = 0;
             int o = 1;
-            using (StreamReader sr = new StreamReader(@"C:\Users\joaki\Desktop\TBD.txt"))
+            using (StreamReader sr = new StreamReader(@"C:\Users\joaki\source\repos\Inlamning_3_ra_kod\molkfreecalc.clc.txt"))
             {
                 while (sr.Peek() >= 0)
                 {
@@ -362,7 +362,7 @@ namespace Inlamning_3_ra_kod
         */
         public void SaveToFile()
         {
-            using(StreamWriter sw = new StreamWriter(@"C:\Users\joaki\Desktop\calc.txt"))
+            using(StreamWriter sw = new StreamWriter(@"C:\Users\joaki\source\repos\Inlamning_3_ra_kod\molkfreecalc.clc.txt"))
             {
                 sw.WriteLine(T);
                 sw.WriteLine(Z);
