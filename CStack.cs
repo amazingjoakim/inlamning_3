@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Inlamning_3_ra_kod
 {
@@ -20,6 +21,7 @@ namespace Inlamning_3_ra_kod
     public class CStack
     {
         public double X, Y, Z, T;
+        public string[,] numMem = new string[8, 3];
         public string entry;
         /* CONSTRUCTOR: CStack
          * PURPOSE: create a new stack and init X, Y, Z, T and the text entry
@@ -29,6 +31,7 @@ namespace Inlamning_3_ra_kod
         {
             X = Y = Z = T = 0;
             entry = "";
+            ReadFile();
         }
         /* METHOD: Exit
          * PURPOSE: called on exit, prepared for saving
@@ -37,7 +40,7 @@ namespace Inlamning_3_ra_kod
          */
         public void Exit()
         {
-
+            SaveToFile();
         }
         /* METHOD: StackString
          * PURPOSE: construct a string to write out in a stack view
@@ -52,11 +55,24 @@ namespace Inlamning_3_ra_kod
         /* METHOD: VarString
          * PURPOSE: construct a string to write out in a variable list
          * PARAMETERS: --
-         * RETURNS: NOT YET IMPLEMENTED
+         * RETURNS: a string of all variables
          */
         public string VarString()
         {
-            return "insertme";
+            string list = "";
+            for (int i = 0; i < 8; i++)
+            {
+                if(i == 0)
+                {
+                    list = numMem[i, 1];
+                }
+                else
+                {
+                    list = list + "\n" + numMem[i, 1];
+                }
+                
+            }
+            return list;
         }
         /* METHOD: SetX
          * PURPOSE: set X with overwrite
@@ -242,34 +258,122 @@ namespace Inlamning_3_ra_kod
             T = Z; Z = Y; Y = X; X = newX;
         }
         /* METHOD: SetAddress
-         * PURPOSE: 
+         * PURPOSE: for the user to select a variable
          * PARAMETERS: string name - variable name
-         * RETURNS: --
+         * RETURNS: none
          * FEATURES: NOT YET IMPLEMENTED
          */
         public void SetAddress(string name)
         {
+            numMem[0, 0] = "A";
+            numMem[1, 0] = "B";
+            numMem[2, 0] = "C";
+            numMem[3, 0] = "D";
+            numMem[4, 0] = "E";
+            numMem[5, 0] = "F";
+            numMem[6, 0] = "G";
+            numMem[7, 0] = "H";
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (numMem[i, 0] == name)
+                {
+                    numMem[i, 2] = "1";
+                }
+                else if (numMem[i, 0] != name)
+                {
+                    numMem[i, 2] = "0";
+                }
+            }
+
 
         }
         /* METHOD: SetVar
-         * PURPOSE: 
-         * PARAMETERS: --
-         * RETURNS: --
-         * FEATURES: NOT YET IMPLEMENTED
+         * PURPOSE: To save X in an array
+         * PARAMETERS: none
+         * RETURNS: none
+         * FEATURES:
          */
         public void SetVar()
         {
-
+            for (int i = 0; i < 8; i++)
+            {
+                if (numMem[i, 2] == "1")
+                {
+                    numMem[i, 1] = X.ToString();
+                }
+            }
         }
         /* METHOD: GetVar
-         * PURPOSE: 
-         * PARAMETERS: --
-         * RETURNS: --
-         * FEATURES: NOT YET IMPLEMENTED
+         * PURPOSE: to put saved number in X;
+         * PARAMETERS: none
+         * RETURNS: none
+         * FEATURES:
          */
         public void GetVar()
         {
+            for (int i = 0; i < 8; i++)
+            {
+                if (numMem[i, 2] == "1")
+                {
+                    entry = numMem[i, 1];
+                    Enter();
+                }
+            }
+        }
 
+
+        /* METHOD: ReadFile
+        * PURPOSE: reads saved numbers from txt file
+        * PARAMETERS: none
+        * RETURNS: none
+        * FEATURES:
+        */
+        public void ReadFile()
+        {
+            int arrayorder = 0;
+            int o = 1;
+            using (StreamReader sr = new StreamReader(@"C:\Users\joaki\Desktop\TBD.txt"))
+            {
+                while (sr.Peek() >= 0)
+                {
+                    string line = sr.ReadLine();
+                    if (o < 5)
+                    {
+                        entry = line;
+                        Enter();
+                        o++;
+                    }
+                    else if (o > 4 && o < 13)
+                    {
+                        numMem[arrayorder, 1] = line;
+                        o++;
+                        arrayorder++;
+                    }
+                }
+            }
+        }
+
+        /* METHOD: SaveToFile
+        * PURPOSE: numbers currently in use is saved to txt file
+        * PARAMETERS: none
+        * RETURNS: none
+        * FEATURES:
+        */
+        public void SaveToFile()
+        {
+            using(StreamWriter sw = new StreamWriter(@"C:\Users\joaki\Desktop\calc.txt"))
+            {
+                sw.WriteLine(T);
+                sw.WriteLine(Z);
+                sw.WriteLine(Y);
+                sw.WriteLine(X);
+                for(int i = 0; i < 8; i++)
+                {
+                    sw.WriteLine(numMem[i,1]);
+                }
+
+            }
         }
     }
 }
